@@ -1,0 +1,188 @@
+<html>
+<head>
+<title>City Finder</title>
+<script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/rollups/md5.js"></script>
+
+</head>
+<body>
+<form>
+Enter A Utah City: <input type="text" id="cityfield" value=""><br>
+Suggestion: <span id="txtHint">Empty</span>
+<input id="button" type="submit" value="Submit">
+</form>
+<p>City</p>
+<textarea id="dispcity">No City</textarea>
+<p>Current Weather</p>
+<div id="weather">No weather</div>
+<br>
+<form>
+Enter A Boy's Name: <input type="text" id="namefield" value=""><br>
+Suggestion: <span id="nameHint">Empty</span>
+<input id="name-button" type="submit" value="Submit">
+</form>
+<p>Name</p>
+<textarea id="dispname">No Name</textarea>
+<p>Name Rank</p>
+<div id="name">No name</div>
+<br>
+<!--<form>
+	Enter a Marvel Superhero's Name (Iron Man, Hulk, Captain America, Spider-Man, etc.): 
+	<br>
+	<input type="text" id="comicfield" value=""><br>
+	<input id="comic-button" type="submit" value="Submit">
+</form>
+<p>Superhero:</p>
+<textarea id="disphero">No Hero</textarea>
+<p>Selected Hero:</p>
+<div id="hero">No hero</div>-->
+</body>
+</html>
+
+<script>
+$(document).ready(function() {
+$( "#cityfield" ).keyup(function() {
+	var url = "../getcity?q="+$("#cityfield").val();
+  $.getJSON(url,function(data) {
+    var everything;
+    everything = "<ul>";
+    $.each(data, function(i,item) {
+      everything += "<li> "+data[i].city;
+    });
+    everything += "</ul>";
+    $("#txtHint").html(everything);
+  })
+  .done(function() { console.log('getJSON request succeeded!'); })
+  .fail(function(jqXHR, textStatus, errorThrown) { 
+    console.log('getJSON request failed! ' + textStatus); 
+    console.log("incoming "+jqXHR.responseText);
+  })
+  .always(function() { console.log('getJSON request ended!');
+  })
+  .complete(function() { console.log("complete"); });
+});
+
+$("#button").click(function(e){
+	var value = $("#cityfield").val();
+  	console.log(value);
+	e.preventDefault();
+	$("#dispcity").text(value);
+
+	var myurl= "https://api.wunderground.com/api/aa936f2101978a4c/geolookup/conditions/q/UT/";
+	myurl += value;
+	myurl += ".json";
+	console.log(myurl);
+	$.ajax({
+		url : myurl,
+		crossDomain : true,
+		dataType : "jsonp",
+		success : function(parsed_json) {
+			var location = parsed_json['location']['city'];
+    		var temp_string = parsed_json['current_observation']['temperature_string'];
+      		var current_weather = parsed_json['current_observation']['weather'];
+      		everything = "<ul>";
+      		everything += "<li>Location: "+location;
+      		everything += "<li>Temperature: "+temp_string;
+      		everything += "<li>Weather: "+current_weather;
+      		everything += "</ul>";
+      		$("#weather").html(everything);
+	    }
+	  });
+});
+
+$( "#namefield" ).keyup(function() {
+        var url = "../getname?q="+$("#namefield").val();
+  $.getJSON(url,function(data) {
+    var everything;
+    everything = "<ul>";
+    $.each(data, function(i,item) {
+	everything += "<li> "+data[i].name;
+	console.log(data[i].rank);
+    });
+    everything += "</ul>";
+    $("#nameHint").html(everything);
+  })
+  .done(function() { console.log('getJSON request succeeded!'); })
+  .fail(function(jqXHR, textStatus, errorThrown) { 
+    console.log('getJSON request failed! ' + textStatus); 
+    console.log("incoming "+jqXHR.responseText);
+  })
+  .always(function() { console.log('getJSON request ended!');
+  })
+  .complete(function() { console.log("complete"); });
+});
+
+$("#name-button").click(function(e){
+        var value = $("#namefield").val();
+        console.log(value);
+        e.preventDefault();
+        $("#dispname").text(value);
+	var rank;
+	var name;
+
+	var url = "../getname?q="+$("#namefield").val();
+ 	$.getJSON(url,function(data) {
+		$.each(data, function(i,item) {
+			console.log(value);
+			console.log(data[i].name);
+			console.log(value.length);
+			console.log(data[i].name.length);
+			if (value === data[i].name) {
+                		rank = data[i].rank;
+				console.log(rank);
+				console.log("here");
+				name = data[i].name;
+				console.log(name);
+        		}
+    		});
+		console.log(name);
+		everything = "<ul>"
+		everything += "<li>Rank: " + rank;
+		everything += "<li>Name: " + name;
+		everything += "</ul>";
+	        $("#name").html(everything);
+	});
+	//console.log(name);
+	//everything = "<ul>"
+	//everything += "<li>Rank: " + rank;
+	//everything += "<li>Name: " + name;
+	//everything += "</ul>";
+        //$("#name").html(everything);
+});
+
+
+/*$("#comic-button").click(function(e){
+	var hero = $("#comicfield").val();
+	console.log(hero);
+	e.preventDefault();
+	$("#disphero").text(hero);
+
+	var timeStamp = Date.now();
+	var hash = CryptoJS.MD5(timeStamp + "ad2fe3669218b1bb433cd3225d6edcfa87e76548"
++ "8a73c758088ac08948467364d6bfc8e7");
+	var marvelUrl = "http://gateway.marvel.com:80/v1/public/characters?name=" + hero + "&ts=" + timeStamp + "&apikey=8a73c758088ac08948467364d6bfc8e7";
+	marvelUrl += "&hash=" + hash;
+	console.log(marvelUrl);
+	$.ajax({
+		url : marvelUrl,
+		dataType : "json",
+		crossDomain : true,
+		//jsonpCallback: "localJsonpCallback",
+		success : function(parsed_json) {
+			var name = parsed_json['data']['results'][0]['name'];
+			var description = parsed_json.data.results[0].description;
+			var img = parsed_json.data.results[0].thumbnail.path + "." + parsed_json.data.results[0].thumbnail.extension;
+			console.log(name);
+			everything = "<ul>";
+			everything += "<li>Name: " +name;
+			everything += "<li>Description: " + description;
+			everything += "<li>Image: <br>" + '<img src="'+ img +'" alt="superhero">';
+			everything += "</ul>";
+			$("#hero").html(everything);
+			//$("#xkcd").update('<img src='+ img + 'alt="comic">');
+		}
+	});
+});*/
+
+});
+</script>

@@ -1,0 +1,40 @@
+nohup: ignoring input
+
+> Lab7Express@0.0.0 start /opt/bitnami/apache2/htdocs/CS360Lab7/Lab7Express
+> node ./bin/www
+
+[0mGET / [32m200 [0m10.717 ms - 5693[0m
+In getname route
+[0mGET /getname?q=n [32m200 [0m5.608 ms - 2[0m
+In getname route
+[0mGET /getname?q= [32m200 [0m3.001 ms - 2791[0m
+In getname route
+[0mGET /getname?q=N [32m200 [0m0.747 ms - 142[0m
+In getname route
+[0mGET /getname?q=N [36m304 [0m0.972 ms - -[0m
+In getname route
+[0mGET /getname?q=No [32m200 [0m0.726 ms - 53[0m
+In getname route
+[0mGET /getname?q=Noa [32m200 [0m0.658 ms - 26[0m
+In getname route
+[0mGET /getname?q=Noah [32m200 [0m0.680 ms - 26[0m
+In getname route
+[0mGET /getname?q=Noah [36m304 [0m0.671 ms - -[0m
+In getname route
+[0mGET /getname?q=Noah [36m304 [0m0.620 ms - -[0m
+In getname route
+[0mGET /getname?q=E [32m200 [0m1.083 ms - 162[0m
+In getname route
+[0mGET /getname?q=E [36m304 [0m3.146 ms - -[0m
+In getname route
+[0mGET /getname?q=Et [32m200 [0m2.951 ms - 27[0m
+In getname route
+[0mGET /getname?q=Eth [32m200 [0m1.428 ms - 27[0m
+In getname route
+[0mGET /getname?q=Ethan [32m200 [0m1.286 ms - 27[0m
+In getname route
+[0mGET /getname?q=Ethan [36m304 [0m0.667 ms - -[0m
+In getname route
+[0mGET /getname?q=Ethan [36m304 [0m0.694 ms - -[0m
+In getname route
+[0mGET /getname?q=Ethan [36m304 [0m1.061 ms - -[0m
